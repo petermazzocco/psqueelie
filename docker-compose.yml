@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT_EXTERNAL}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U squeelie -d squeelie"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: https://github.com/petermazzocco/psqueelie.git
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT_EXTERNAL}:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./.env.local:/app/.env.local:ro
+
+volumes:
+  postgres_data:
