@@ -2,18 +2,47 @@
 
 A self-hosted PostgreSQL dashboard for executing SQL queries and visualizing data. Like Umami, but for database management - just clone, run docker-compose, and start querying your data.
 
-## 🚀 Quick Start with Docker
+## 🚀 Self-Hosting Options
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd squeelie
-   ```
+### Option 1: Docker Compose (Recommended)
+```bash
+# Download the docker-compose.yml
+curl -O https://raw.githubusercontent.com/petermazzocco/psqueelie/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/petermazzocco/psqueelie/main/.env.example
 
-2. **Start with Docker Compose**
-   ```bash
-   docker-compose up -d
-   ```
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your values
+
+# Start the stack
+docker-compose up -d
+```
+
+### Option 2: Clone and Docker Build
+```bash
+git clone https://github.com/petermazzocco/psqueelie.git
+cd psqueelie
+
+# Set environment variables
+cp .env.example .env
+# Edit .env with your values
+
+docker-compose up -d
+```
+
+### Option 3: Deploy to Vercel
+```bash
+# Clone the repository
+git clone https://github.com/petermazzocco/psqueelie.git
+cd psqueelie
+
+# Deploy to Vercel (requires Vercel CLI)
+vercel --prod
+
+# Or connect your GitHub repo to Vercel dashboard
+# Set environment variables in Vercel dashboard
+# Connect to your external PostgreSQL database
+```
 
 3. **Access the application**
    - Open [http://localhost:3000](http://localhost:3000)
